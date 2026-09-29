@@ -1,0 +1,48 @@
+⚠ Attempted to load @next/swc-linux-x64-gnu, but an error occurred: /lib64/libm.so.6: version `GLIBC_2.29' not found (required by /home/mariakat/nodevenv/repositories/mydreamland-next/24/lib/node_modules/@next/swc-linux-x64-gnu/next-swc.linux-x64-gnu.node)
+⚠ Attempted to load @next/swc-linux-x64-musl, but it was not installed
+⚠ Attempted to load @next/swc-linux-x64-gnu, but an error occurred: /lib64/libm.so.6: version `GLIBC_2.29' not found (required by /home/mariakat/nodevenv/repositories/mydreamland-next/24/lib/node_modules/@next/swc-linux-x64-gnu/next-swc.linux-x64-gnu.node)
+⚠ Attempted to load @next/swc-linux-x64-musl, but it was not installed
+⚠ Attempted to load @next/swc-linux-x64-gnu, but an error occurred: /lib64/libm.so.6: version `GLIBC_2.29' not found (required by /home/mariakat/nodevenv/repositories/mydreamland-next/24/lib/node_modules/@next/swc-linux-x64-gnu/next-swc.linux-x64-gnu.node)
+⚠ Attempted to load @next/swc-linux-x64-musl, but it was not installed
+⨯ TypeError: Failed to parse URL from undefined/api/articles
+    at <unknown> (.next/server/chunks/605.js:8:14332)
+    at _ (.next/server/chunks/605.js:165:9660)
+    at <unknown> (.next/server/chunks/605.js:165:12383)
+    at <unknown> (.next/server/chunks/605.js:15:4721)
+    at <unknown> (.next/server/chunks/605.js:15:4963)
+    at e.with (.next/server/chunks/605.js:15:27329)
+    at i.with (.next/server/chunks/605.js:15:21597)
+    at i.startActiveSpan (.next/server/chunks/605.js:15:36511)
+    at e.startActiveSpan (.next/server/chunks/605.js:15:37044) {
+  digest: '2365136799',
+  [cause]: TypeError: Invalid URL
+      at <unknown> (.next/server/chunks/605.js:8:14332)
+      at _ (.next/server/chunks/605.js:165:9660)
+      at <unknown> (.next/server/chunks/605.js:165:12383)
+      at <unknown> (.next/server/chunks/605.js:15:4721)
+      at <unknown> (.next/server/chunks/605.js:15:4963)
+      at e.with (.next/server/chunks/605.js:15:27329)
+      at i.with (.next/server/chunks/605.js:15:21597)
+      at i.startActiveSpan (.next/server/chunks/605.js:15:36511) {
+    code: 'ERR_INVALID_URL',
+    input: 'undefined/api/articles'
+  }
+}
+⚠ Attempted to load @next/swc-linux-x64-gnu, but an error occurred: /lib64/libm.so.6: version `GLIBC_2.29' not found (required by /home/mariakat/nodevenv/repositories/mydreamland-next/24/lib/node_modules/@next/swc-linux-x64-gnu/next-swc.linux-x64-gnu.node)
+⚠ Attempted to load @next/swc-linux-x64-musl, but it was not installed
+⨯ Error: Strapi request failed: 401
+    at e (.next/server/app/page.js:1:3783)
+    at async f (.next/server/app/page.js:1:3880) {
+  digest: '1730131009'
+}
+⨯ Error: Strapi request failed: 401
+    at e (.next/server/app/page.js:1:3783)
+    at async f (.next/server/app/page.js:1:3880) {
+  digest: '1730131009'
+}
+⚠ Attempted to load @next/swc-linux-x64-gnu, but an error occurred: /lib64/libm.so.6: version `GLIBC_2.29' not found (required by /home/mariakat/nodevenv/repositories/mydreamland-next/24/lib/node_modules/@next/swc-linux-x64-gnu/next-swc.linux-x64-gnu.node)
+⚠ Attempted to load @next/swc-linux-x64-musl, but it was not installed
+⚠ Attempted to load @next/swc-linux-x64-gnu, but an error occurred: /lib64/libm.so.6: version `GLIBC_2.29' not found (required by /home/mariakat/nodevenv/repositories/mydreamland-next/24/lib/node_modules/@next/swc-linux-x64-gnu/next-swc.linux-x64-gnu.node)
+⚠ Attempted to load @next/swc-linux-x64-musl, but it was not installed
+⚠ Attempted to load @next/swc-linux-x64-gnu, but an error occurred: /lib64/libm.so.6: version `GLIBC_2.29' not found (required by /home/mariakat/nodevenv/repositories/mydreamland-next/24/lib/node_modules/@next/swc-linux-x64-gnu/next-swc.linux-x64-gnu.node)
+⚠ Attempted to load @next/swc-linux-x64-musl, but it was not installed
