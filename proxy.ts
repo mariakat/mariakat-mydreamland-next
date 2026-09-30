@@ -12,6 +12,11 @@ import {
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // Switch the gate off from cPanel: environment variable PREVIEW_GATE=off.
+  if (process.env.PREVIEW_GATE?.trim().toLowerCase() === "off") {
+    return NextResponse.next();
+  }
+
   // The unlock endpoint and the coming-soon page itself must stay reachable.
   if (pathname === "/api/unlock" || pathname === "/coming-soon") {
     return NextResponse.next();
