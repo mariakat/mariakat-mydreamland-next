@@ -212,7 +212,7 @@ export default async function Home() {
       </section>
 
       <section className={`${container} pb-16 pt-6 lg:pb-[72px]`}>
-        <div className="flex flex-col items-start justify-between gap-6 rounded-[28px] bg-sage-soft px-7 py-9 sm:flex-row sm:items-center sm:px-12">
+        <div className="flex flex-col items-start justify-between gap-6 rounded-[28px] bg-blush px-7 py-9 sm:flex-row sm:items-center sm:px-12">
           <div className="flex flex-col gap-2">
             <h2 className="m-0 font-serif text-[32px] font-bold text-burgundy lg:text-4xl">
               <span className="text-rose-star">✦</span> Στο Instagram

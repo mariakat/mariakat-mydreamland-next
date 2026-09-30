@@ -9,7 +9,7 @@ const link =
 
 export function SiteFooter() {
   return (
-    <footer className="mt-auto bg-band">
+    <footer className="mt-auto bg-sage-soft">
       <div className="mx-auto flex max-w-[1440px] flex-col gap-9 px-4 pb-8 pt-10 sm:px-10 lg:px-20 lg:pt-14">
         <div className="grid gap-10 md:grid-cols-3 md:gap-12">
           <div className="flex flex-col gap-3">
@@ -44,7 +44,7 @@ export function SiteFooter() {
             </a>
           </nav>
         </div>
-        <div className="flex flex-col justify-between gap-2 border-t border-sage-line pt-5 font-sans text-sm tracking-[0.02em] text-muted sm:flex-row">
+        <div className="flex flex-col justify-between gap-2 border-t border-sage-line pt-5 font-sans text-sm tracking-[0.02em] text-ink sm:flex-row">
           <span>© {new Date().getFullYear()} My Dreamland Blog</span>
           <span>Φτιαγμένο με ✦ και πολύ καφέ</span>
         </div>
