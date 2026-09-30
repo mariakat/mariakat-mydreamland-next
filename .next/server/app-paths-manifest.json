@@ -3,6 +3,6 @@
   "/_global-error/page": "app/_global-error/page.js",
   "/api/unlock/route": "app/api/unlock/route.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/page": "app/page.js",
+  "/(site)/page": "app/(site)/page.js",
   "/coming-soon/page": "app/coming-soon/page.js"
 }

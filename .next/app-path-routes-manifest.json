@@ -3,6 +3,6 @@
   "/_global-error/page": "/_global-error",
   "/api/unlock/route": "/api/unlock",
   "/favicon.ico/route": "/favicon.ico",
-  "/page": "/",
+  "/(site)/page": "/",
   "/coming-soon/page": "/coming-soon"
 }
