@@ -14,8 +14,15 @@
 /coverage
 
 # next.js
-/.next/
+# The build output (.next) is committed on purpose: the cPanel server can't
+# run `next build` reliably (old GLIBC, thread limits), so it is built
+# elsewhere and deployed with `git pull`. Only the build cache stays out.
+/.next/cache/
+/.next/trace
+/.next/trace-build
+/.next/diagnostics/
 /out/
+package-lock.json
 
 # production
 /build

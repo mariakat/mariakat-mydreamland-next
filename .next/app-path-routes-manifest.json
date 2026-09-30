@@ -1,0 +1,8 @@
+{
+  "/_not-found/page": "/_not-found",
+  "/_global-error/page": "/_global-error",
+  "/api/unlock/route": "/api/unlock",
+  "/favicon.ico/route": "/favicon.ico",
+  "/page": "/",
+  "/coming-soon/page": "/coming-soon"
+}
