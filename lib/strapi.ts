@@ -1,9 +1,11 @@
 // Server-side access to the Strapi CMS. Everything here runs on the server
 // only (Server Components), so the API token never reaches the browser.
 
+import { unstable_rethrow } from "next/navigation";
+import { cache } from "react";
 import type { CategoryName } from "./categories";
 
-function cmsUrl(): string {
+export function cmsUrl(): string {
   const url =
     process.env.STRAPI_URL ||
     process.env.NEXT_PUBLIC_STRAPI_URL ||
@@ -57,6 +59,8 @@ export type Pagination = {
 
 type ListResponse<T> = { data: T[]; meta: { pagination: Pagination } };
 
+export class StrapiNotFoundError extends Error {}
+
 async function strapiGet<T>(path: string, params: URLSearchParams): Promise<T> {
   const token = process.env.STRAPI_API_TOKEN;
   const res = await fetch(`${cmsUrl()}/api/${path}?${params.toString()}`, {
@@ -64,6 +68,9 @@ async function strapiGet<T>(path: string, params: URLSearchParams): Promise<T> {
     // Always fresh: a new article appears as soon as it's published.
     cache: "no-store",
   });
+  if (res.status === 404) {
+    throw new StrapiNotFoundError(`Strapi /api/${path}: not found`);
+  }
   if (!res.ok) {
     throw new Error(`Strapi request /api/${path} failed: ${res.status}`);
   }
@@ -88,9 +95,61 @@ export async function getArticles(
   return strapiGet<ListResponse<Article>>("articles", params);
 }
 
+// One article by its slug, with everything the article page shows.
+// Wrapped in cache() so the page and its metadata share one request.
+export const getArticleBySlug = cache(async (slug: string) => {
+  const params = new URLSearchParams();
+  params.set("filters[slug][$eq]", slug);
+  params.set("pagination[pageSize]", "1");
+  params.set("populate[0]", "coverImage");
+  params.set("populate[1]", "tags");
+  params.set("populate[2]", "reviewCard.poster");
+  const res = await strapiGet<ListResponse<Article>>("articles", params);
+  return res.data[0] ?? null;
+});
+
+export type SiteSettings = {
+  authorName: string | null;
+  authorPhoto: StrapiMedia | null;
+  authorBio: string | null;
+};
+
+const EMPTY_SETTINGS: SiteSettings = {
+  authorName: null,
+  authorPhoto: null,
+  authorBio: null,
+};
+
+// "Ρυθμίσεις site" from the CMS. Never fails the page: if the entry was
+// never saved or the CMS is unreachable, callers fall back to defaults.
+export const getSiteSettings = cache(async (): Promise<SiteSettings> => {
+  try {
+    const params = new URLSearchParams();
+    params.set("populate[0]", "authorPhoto");
+    const res = await strapiGet<{ data: SiteSettings | null }>(
+      "site-setting",
+      params,
+    );
+    return { ...EMPTY_SETTINGS, ...(res.data ?? {}) };
+  } catch (error) {
+    unstable_rethrow(error);
+    if (!(error instanceof StrapiNotFoundError)) {
+      console.error("[settings] could not load site settings:", error);
+    }
+    return EMPTY_SETTINGS;
+  }
+});
+
 export function mediaUrl(media: StrapiMedia | null | undefined): string | null {
-  if (!media?.url) return null;
-  return media.url.startsWith("http") ? media.url : `${cmsUrl()}${media.url}`;
+  return absoluteCmsUrl(media?.url);
+}
+
+// Uploads come back as "/uploads/…"; the browser needs the CMS address too.
+export function absoluteCmsUrl(url: string | null | undefined): string | null {
+  if (!url) return null;
+  return /^(https?:)?\/\//.test(url) || url.startsWith("data:")
+    ? url
+    : `${cmsUrl()}${url.startsWith("/") ? "" : "/"}${url}`;
 }
 
 // Plain-text excerpt: the excerpt field, or the start of the body without markdown.

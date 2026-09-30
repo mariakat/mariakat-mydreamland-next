@@ -47,6 +47,33 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
 }
 
 
+// Validate ../../app/(site)/arthra/[slug]/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/arthra/[slug]">> = Specific
+  const handler = {} as typeof import("../../app/(site)/arthra/[slug]/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../app/(site)/arthra/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/arthra">> = Specific
+  const handler = {} as typeof import("../../app/(site)/arthra/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../app/(site)/kategoria/[slug]/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/kategoria/[slug]">> = Specific
+  const handler = {} as typeof import("../../app/(site)/kategoria/[slug]/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../app/(site)/page.tsx
 {
   type __IsExpected<Specific extends AppPageConfig<"/">> = Specific

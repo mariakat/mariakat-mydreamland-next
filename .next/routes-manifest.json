@@ -21,7 +21,24 @@
     "afterFiles": [],
     "fallback": []
   },
-  "dynamicRoutes": [],
+  "dynamicRoutes": [
+    {
+      "page": "/arthra/[slug]",
+      "regex": "^/arthra/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPslug": "nxtPslug"
+      },
+      "namedRegex": "^/arthra/(?<nxtPslug>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/kategoria/[slug]",
+      "regex": "^/kategoria/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPslug": "nxtPslug"
+      },
+      "namedRegex": "^/kategoria/(?<nxtPslug>[^/]+?)(?:/)?$"
+    }
+  ],
   "staticRoutes": [
     {
       "page": "/",
@@ -46,6 +63,12 @@
       "regex": "^/api/unlock(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/api/unlock(?:/)?$"
+    },
+    {
+      "page": "/arthra",
+      "regex": "^/arthra(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/arthra(?:/)?$"
     },
     {
       "page": "/coming-soon",

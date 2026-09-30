@@ -2,11 +2,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { unstable_rethrow } from "next/navigation";
 import { ArticleCard } from "@/components/ArticleCard";
+import { AuthorAvatar } from "@/components/AuthorAvatar";
 import { FeaturedArticle } from "@/components/FeaturedArticle";
 import { ArrowRightIcon, InstagramIcon } from "@/components/icons";
 import { Pill } from "@/components/Pill";
 import { CATEGORIES } from "@/lib/categories";
-import { getArticles, type Article } from "@/lib/strapi";
+import {
+  getArticles,
+  getSiteSettings,
+  type Article,
+  type SiteSettings,
+} from "@/lib/strapi";
 
 // Rendered on every request so new articles show up immediately
 // (and nothing is fetched from the CMS at build time).
@@ -90,25 +96,17 @@ function Hero() {
   );
 }
 
-function Sidebar() {
+function Sidebar({ settings }: { settings: SiteSettings }) {
   return (
     <aside className="flex flex-col gap-8">
       <div className="flex flex-col items-center gap-3.5 rounded-[18px] bg-white p-7 text-center shadow-card">
-        <div className="flex h-[120px] w-[120px] items-end justify-center overflow-hidden rounded-full bg-blush">
-          <Image
-            src="/images/mascot.png"
-            alt=""
-            width={547}
-            height={462}
-            className="h-auto w-[150%] max-w-none translate-y-[6%]"
-          />
-        </div>
+        <AuthorAvatar settings={settings} size={120} />
         <h2 className="m-0 font-serif text-[26px] font-bold text-burgundy">
           Γεια σου, Dreamer
         </h2>
         <p className="m-0 text-[17px] leading-normal">
-          Εδώ γράφω για ταινίες, βιβλία, συνταγές, τεχνολογία και όσα με
-          κάνουν να ονειρεύομαι.
+          {settings.authorBio ||
+            "Εδώ γράφω για ταινίες, βιβλία, συνταγές, τεχνολογία και όσα με κάνουν να ονειρεύομαι."}
         </p>
         <Link href="/sxetika" className="font-sans text-base font-bold text-burgundy">
           Γνώρισέ με
@@ -148,7 +146,10 @@ function Sidebar() {
 }
 
 export default async function Home() {
-  const articles = await loadHomeArticles();
+  const [articles, settings] = await Promise.all([
+    loadHomeArticles(),
+    getSiteSettings(),
+  ]);
 
   return (
     <>
@@ -207,7 +208,7 @@ export default async function Home() {
           )}
         </div>
 
-        <Sidebar />
+        <Sidebar settings={settings} />
       </section>
 
       <section className={`${container} pb-16 pt-6 lg:pb-[72px]`}>
