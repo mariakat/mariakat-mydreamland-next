@@ -3,9 +3,9 @@
   "/_global-error/page": "/_global-error",
   "/api/unlock/route": "/api/unlock",
   "/favicon.ico/route": "/favicon.ico",
-  "/(site)/arthra/page": "/arthra",
-  "/coming-soon/page": "/coming-soon",
   "/(site)/arthra/[slug]/page": "/arthra/[slug]",
+  "/(site)/arthra/page": "/arthra",
+  "/(site)/kategoria/[slug]/page": "/kategoria/[slug]",
   "/(site)/page": "/",
-  "/(site)/kategoria/[slug]/page": "/kategoria/[slug]"
+  "/coming-soon/page": "/coming-soon"
 }

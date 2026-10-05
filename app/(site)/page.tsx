@@ -4,9 +4,11 @@ import { unstable_rethrow } from "next/navigation";
 import { ArticleCard } from "@/components/ArticleCard";
 import { AuthorAvatar } from "@/components/AuthorAvatar";
 import { FeaturedArticle } from "@/components/FeaturedArticle";
+import { InstagramSection } from "@/components/InstagramSection";
 import { ArrowRightIcon, InstagramIcon } from "@/components/icons";
 import { Pill } from "@/components/Pill";
 import { CATEGORIES } from "@/lib/categories";
+import { getInstagramPosts } from "@/lib/instagram";
 import {
   getArticles,
   getSiteSettings,
@@ -146,9 +148,10 @@ function Sidebar({ settings }: { settings: SiteSettings }) {
 }
 
 export default async function Home() {
-  const [articles, settings] = await Promise.all([
+  const [articles, settings, instagramPosts] = await Promise.all([
     loadHomeArticles(),
     getSiteSettings(),
+    getInstagramPosts(),
   ]);
 
   return (
@@ -211,21 +214,10 @@ export default async function Home() {
         <Sidebar settings={settings} />
       </section>
 
-      <section className={`${container} pb-16 pt-6 lg:pb-[72px]`}>
-        <div className="flex flex-col items-start justify-between gap-6 rounded-[28px] bg-blush px-7 py-9 sm:flex-row sm:items-center sm:px-12">
-          <div className="flex flex-col gap-2">
-            <h2 className="m-0 font-serif text-[32px] font-bold text-burgundy lg:text-4xl">
-              <span className="text-rose-star">✦</span> Στο Instagram
-            </h2>
-            <p className="m-0 text-lg">
-              Μικρές στιγμές, βιβλία στο κομοδίνο και ό,τι βλέπω αυτή την εβδομάδα.
-            </p>
-          </div>
-          <a href={INSTAGRAM} className={sageButton}>
-            <InstagramIcon size={18} /> @mydreamlandbl
-          </a>
-        </div>
-      </section>
+      <InstagramSection
+        posts={instagramPosts}
+        className={`${container} pb-16 pt-6 lg:pb-[72px]`}
+      />
     </>
   );
 }
