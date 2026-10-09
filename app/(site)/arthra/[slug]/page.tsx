@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AuthorAvatar } from "@/components/AuthorAvatar";
+import { ArticleContent } from "@/components/blocks/ArticleContent";
 import { Markdown } from "@/components/Markdown";
 import { Pill } from "@/components/Pill";
 import { ReviewCard } from "@/components/ReviewCard";
@@ -111,7 +112,9 @@ export default async function ArticlePage({
       )}
 
       <div className="mx-auto flex max-w-[760px] flex-col gap-7 px-4 pb-16 pt-10 sm:px-0 sm:pb-[72px] sm:pt-14">
-        {article.body ? (
+        {article.content && article.content.length > 0 ? (
+          <ArticleContent blocks={article.content} />
+        ) : article.body ? (
           <Markdown>{article.body}</Markdown>
         ) : (
           article.excerpt && (

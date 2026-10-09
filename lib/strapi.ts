@@ -48,7 +48,63 @@ export type Article = {
   publishedAt: string;
   tags?: Tag[];
   reviewCard?: ReviewCard | null;
+  content?: ContentBlock[] | null;
 };
+
+// Rich text from Strapi's Blocks editor (paragraphs, headings, lists…).
+export type RichTextNode = {
+  type: string;
+  text?: string;
+  children?: RichTextNode[];
+  [key: string]: unknown;
+};
+
+// The post builder: the "content" dynamic zone of an article.
+export type ContentBlock =
+  | { __component: "blocks.text"; id: number; content: RichTextNode[] }
+  | { __component: "blocks.image"; id: number; image: StrapiMedia | null; caption: string | null; wide: boolean | null }
+  | { __component: "blocks.gallery"; id: number; images: StrapiMedia[] | null; caption: string | null }
+  | { __component: "blocks.quote"; id: number; text: string; author: string | null }
+  | ({ __component: "blog.review-card"; id: number } & ReviewCard)
+  | { __component: "blocks.spotify"; id: number; url: string }
+  | { __component: "blocks.youtube"; id: number; url: string; caption: string | null }
+  | { __component: "blocks.instagram"; id: number; url: string }
+  | { __component: "blocks.related-article"; id: number; label: string | null; article: Article | null }
+  | { __component: "blocks.divider"; id: number; label: string | null }
+  | {
+      __component: "blocks.recipe";
+      id: number;
+      title: string | null;
+      servings: string | null;
+      prepTime: string | null;
+      cookTime: string | null;
+      ingredients: string;
+      steps: string;
+      notes: string | null;
+    };
+
+// Plain text of the post builder's text and quote blocks (for excerpts and
+// reading time when an article has no markdown body).
+export function contentPlainText(blocks: ContentBlock[] | null | undefined): string {
+  // Inline nodes (text, links) join directly; block nodes go on new lines.
+  const walk = (nodes: RichTextNode[] = []): string => {
+    const isInline = nodes.every((n) => n.type === "text" || n.type === "link");
+    return nodes
+      .filter((n) => n.type !== "heading") // headings would read oddly in an excerpt
+      .map((n) => (typeof n.text === "string" ? n.text : walk(n.children)))
+      .join(isInline ? "" : "\n");
+  };
+  return (blocks ?? [])
+    .map((b) =>
+      b.__component === "blocks.text"
+        ? walk(b.content)
+        : b.__component === "blocks.quote"
+          ? b.text
+          : "",
+    )
+    .filter(Boolean)
+    .join("\n");
+}
 
 export type Pagination = {
   page: number;
@@ -89,7 +145,11 @@ export async function getArticles(
   params.set("sort", "publishedAt:desc");
   params.set("pagination[page]", String(options.page ?? 1));
   params.set("pagination[pageSize]", String(options.pageSize ?? 10));
-  params.set("populate[0]", "coverImage");
+  params.set("populate[coverImage]", "true");
+  // Only the text blocks of the post builder: enough for the card's
+  // excerpt and reading time when the article has no excerpt/body.
+  params.set("populate[content][on][blocks.text]", "true");
+  params.set("populate[content][on][blocks.quote]", "true");
   if (options.category) params.set("filters[category][$eq]", options.category);
   if (options.featured) params.set("filters[featured][$eq]", "true");
   return strapiGet<ListResponse<Article>>("articles", params);
@@ -101,9 +161,28 @@ export const getArticleBySlug = cache(async (slug: string) => {
   const params = new URLSearchParams();
   params.set("filters[slug][$eq]", slug);
   params.set("pagination[pageSize]", "1");
-  params.set("populate[0]", "coverImage");
-  params.set("populate[1]", "tags");
-  params.set("populate[2]", "reviewCard.poster");
+  params.set("populate[coverImage]", "true");
+  params.set("populate[tags]", "true");
+  params.set("populate[reviewCard][populate]", "*");
+  // Post builder: every block type, with its images and linked article.
+  for (const c of [
+    "blocks.text",
+    "blocks.quote",
+    "blocks.spotify",
+    "blocks.youtube",
+    "blocks.instagram",
+    "blocks.divider",
+    "blocks.recipe",
+  ]) {
+    params.set(`populate[content][on][${c}]`, "true");
+  }
+  for (const c of ["blocks.image", "blocks.gallery", "blog.review-card"]) {
+    params.set(`populate[content][on][${c}][populate]`, "*");
+  }
+  params.set(
+    "populate[content][on][blocks.related-article][populate][article][populate][coverImage]",
+    "true",
+  );
   const res = await strapiGet<ListResponse<Article>>("articles", params);
   return res.data[0] ?? null;
 });
@@ -156,7 +235,7 @@ export function absoluteCmsUrl(url: string | null | undefined): string | null {
 export function articleExcerpt(article: Article, maxLength = 170): string {
   const source =
     article.excerpt ||
-    (article.body ?? "")
+    (article.body || contentPlainText(article.content))
       .replace(/^#{1,6}\s.*$/gm, "")
       .replace(/!\[[^\]]*\]\([^)]*\)/g, "")
       .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
@@ -170,7 +249,8 @@ export function articleExcerpt(article: Article, maxLength = 170): string {
 // Minutes to read: the readingTime field, or ~200 words per minute.
 export function articleReadingTime(article: Article): number {
   if (article.readingTime) return article.readingTime;
-  const words = (article.body ?? "").split(/\s+/).filter(Boolean).length;
+  const text = `${article.body ?? ""} ${contentPlainText(article.content)}`;
+  const words = text.split(/\s+/).filter(Boolean).length;
   return Math.max(1, Math.round(words / 200));
 }
 
