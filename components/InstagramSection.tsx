@@ -3,6 +3,8 @@ import { InstagramIcon } from "./icons";
 
 const INSTAGRAM = "https://instagram.com/mydreamlandbl";
 
+const MAX_HASHTAGS = 3;
+
 const sageButton =
   "inline-flex min-h-11 shrink-0 items-center gap-2 rounded-[14px] border border-sage bg-sage px-5 py-[11px] font-sans text-base font-bold text-white no-underline shadow-card transition-opacity hover:opacity-90";
 
@@ -57,7 +59,7 @@ export function InstagramSection({
       </div>
       <ul className="m-0 grid list-none grid-cols-2 gap-3 p-0 sm:grid-cols-3 sm:gap-4 lg:grid-cols-6">
         {posts.map((post) => (
-          <li key={post.id}>
+          <li key={post.id} className="flex flex-col gap-2">
             <a
               href={post.permalink}
               target="_blank"
@@ -83,6 +85,22 @@ export function InstagramSection({
                 </span>
               )}
             </a>
+            {post.hashtags.length > 0 && (
+              <ul aria-label="Hashtags" className="m-0 flex list-none flex-wrap gap-x-2 gap-y-0.5 p-0 px-1">
+                {post.hashtags.slice(0, MAX_HASHTAGS).map((tag) => (
+                  <li key={tag} className="min-w-0">
+                    <a
+                      href={`https://www.instagram.com/explore/tags/${encodeURIComponent(tag)}/`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block truncate font-sans text-[13px] font-bold text-sage no-underline hover:text-burgundy hover:underline"
+                    >
+                      #{tag}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
           </li>
         ))}
       </ul>

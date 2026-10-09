@@ -25,6 +25,7 @@ export type InstagramPost = {
   altText: string | null;
   isVideo: boolean;
   timestamp: string;
+  hashtags: string[]; // from the caption, without "#", in the order written
 };
 
 type TokenState = {
@@ -58,6 +59,22 @@ function tokenFile(): string {
 
 function fingerprint(token: string): string {
   return createHash("sha256").update(token).digest("hex").slice(0, 16);
+}
+
+// "#books #βιβλία #books" → ["books", "βιβλία"] (Greek works too).
+export function extractHashtags(caption: string | null | undefined): string[] {
+  if (!caption) return [];
+  const seen = new Set<string>();
+  const tags: string[] = [];
+  for (const match of caption.matchAll(/#([\p{L}\p{N}_]+)/gu)) {
+    const tag = match[1];
+    const key = tag.toLocaleLowerCase("el");
+    if (!seen.has(key)) {
+      seen.add(key);
+      tags.push(tag);
+    }
+  }
+  return tags;
 }
 
 // The token to use: the refreshed one from the file, unless a different
@@ -142,6 +159,7 @@ async function fetchPosts(): Promise<InstagramPost[]> {
         altText: m.alt_text ?? null,
         isVideo: m.media_type === "VIDEO",
         timestamp: m.timestamp,
+        hashtags: extractHashtags(m.caption),
       };
     })
     .filter((p): p is InstagramPost => p !== null)
