@@ -18,6 +18,7 @@
 # run `next build` reliably (old GLIBC, thread limits), so it is built
 # elsewhere and deployed with `git pull`. Only the build cache stays out.
 /.next/cache/
+/.next/dev/
 /.next/trace
 /.next/trace-build
 /.next/diagnostics/
