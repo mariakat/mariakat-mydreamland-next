@@ -1,4 +1,4 @@
-// File: /home/claude/mariakat-mydreamland-next/app/layout.tsx
+// File: D:\mydreamlandReact\mydreamland-next\app\layout.tsx
 import * as entry from '../../../app/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

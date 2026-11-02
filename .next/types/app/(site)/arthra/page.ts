@@ -1,4 +1,4 @@
-// File: /home/claude/mariakat-mydreamland-next/app/(site)/arthra/page.tsx
+// File: D:\mydreamlandReact\mydreamland-next\app\(site)\arthra\page.tsx
 import * as entry from '../../../../../app/(site)/arthra/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
