@@ -117,6 +117,18 @@ type ListResponse<T> = { data: T[]; meta: { pagination: Pagination } };
 
 export class StrapiNotFoundError extends Error {}
 
+const isContentPopulate = (key: string) => key.startsWith("populate[content]");
+
+function hasContentPopulate(params: URLSearchParams): boolean {
+  return [...params.keys()].some(isContentPopulate);
+}
+
+function withoutContentPopulate(params: URLSearchParams): URLSearchParams {
+  return new URLSearchParams(
+    [...params.entries()].filter(([key]) => !isContentPopulate(key)),
+  );
+}
+
 async function strapiGet<T>(path: string, params: URLSearchParams): Promise<T> {
   const token = process.env.STRAPI_API_TOKEN;
   const res = await fetch(`${cmsUrl()}/api/${path}?${params.toString()}`, {
@@ -126,6 +138,17 @@ async function strapiGet<T>(path: string, params: URLSearchParams): Promise<T> {
   });
   if (res.status === 404) {
     throw new StrapiNotFoundError(`Strapi /api/${path}: not found`);
+  }
+  // The CMS may not have the post builder (`content` dynamic zone) yet; it
+  // then rejects the populate with "Invalid key content". Ask again without
+  // it, so articles still show using their plain `body`.
+  if (res.status === 400 && hasContentPopulate(params)) {
+    const err = (await res.json().catch(() => null)) as {
+      error?: { details?: { key?: string; param?: string } };
+    } | null;
+    if (err?.error?.details?.key === "content" && err.error.details.param === "populate") {
+      return strapiGet<T>(path, withoutContentPopulate(params));
+    }
   }
   if (!res.ok) {
     throw new Error(`Strapi request /api/${path} failed: ${res.status}`);

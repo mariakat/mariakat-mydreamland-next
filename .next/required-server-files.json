@@ -105,7 +105,7 @@
         "transform": "lodash/{{member}}"
       }
     },
-    "outputFileTracingRoot": "D:\\mydreamlandReact\\mydreamland-next",
+    "outputFileTracingRoot": "/home/user/mariakat-mydreamland-next",
     "enablePrerenderSourceMaps": true,
     "cacheComponents": false,
     "cacheLife": {
@@ -175,7 +175,7 @@
       "proxyPrefetch": "flexible",
       "optimisticClientCache": true,
       "manualClientBasePath": false,
-      "cpus": 15,
+      "cpus": 3,
       "memoryBasedWorkersCount": false,
       "imgOptConcurrency": null,
       "imgOptOperationCache": null,
@@ -320,35 +320,35 @@
     "htmlLimitedBots": "[\\w-]+-Google|Google-[\\w-]+|Chrome-Lighthouse|Slurp|DuckDuckBot|baiduspider|yandex|sogou|bitlybot|tumblr|vkShare|quora link preview|redditbot|ia_archiver|Bingbot|BingPreview|applebot|facebookexternalhit|facebookcatalog|Twitterbot|LinkedInBot|Slackbot|Discordbot|WhatsApp|SkypeUriPreview|Yeti|googleweblight",
     "bundlePagesRouterDependencies": false,
     "configFileName": "next.config.ts",
-    "repoRoot": "D:\\mydreamlandReact\\mydreamland-next",
+    "repoRoot": "/home/user/mariakat-mydreamland-next",
     "turbopack": {
-      "root": "D:\\mydreamlandReact\\mydreamland-next"
+      "root": "/home/user/mariakat-mydreamland-next"
     },
     "distDirRoot": ".next",
     "supportsImmutableAssets": false
   },
-  "appDir": "D:\\mydreamlandReact\\mydreamland-next",
+  "appDir": "/home/user/mariakat-mydreamland-next",
   "relativeAppDir": "",
   "files": [
-    ".next\\package.json",
-    ".next\\routes-manifest.json",
-    ".next\\server\\pages-manifest.json",
-    ".next\\build-manifest.json",
-    ".next\\prerender-manifest.json",
-    ".next\\server\\functions-config-manifest.json",
-    ".next\\server\\middleware-manifest.json",
-    ".next\\server\\middleware-build-manifest.js",
-    ".next\\server\\middleware-react-loadable-manifest.js",
-    ".next\\react-loadable-manifest.json",
-    ".next\\server\\app-paths-manifest.json",
-    ".next\\app-path-routes-manifest.json",
-    ".next\\server\\server-reference-manifest.js",
-    ".next\\server\\server-reference-manifest.json",
-    ".next\\server\\prefetch-hints.json",
-    ".next\\BUILD_ID",
-    ".next\\server\\next-font-manifest.js",
-    ".next\\server\\next-font-manifest.json",
-    ".next\\required-server-files.json"
+    ".next/package.json",
+    ".next/routes-manifest.json",
+    ".next/server/pages-manifest.json",
+    ".next/build-manifest.json",
+    ".next/prerender-manifest.json",
+    ".next/server/functions-config-manifest.json",
+    ".next/server/middleware-manifest.json",
+    ".next/server/middleware-build-manifest.js",
+    ".next/server/middleware-react-loadable-manifest.js",
+    ".next/react-loadable-manifest.json",
+    ".next/server/app-paths-manifest.json",
+    ".next/app-path-routes-manifest.json",
+    ".next/server/server-reference-manifest.js",
+    ".next/server/server-reference-manifest.json",
+    ".next/server/prefetch-hints.json",
+    ".next/BUILD_ID",
+    ".next/server/next-font-manifest.js",
+    ".next/server/next-font-manifest.json",
+    ".next/required-server-files.json"
   ],
   "ignore": []
 }
