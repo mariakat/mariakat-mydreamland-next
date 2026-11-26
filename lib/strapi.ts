@@ -242,6 +242,118 @@ export const getSiteSettings = cache(async (): Promise<SiteSettings> => {
   }
 });
 
+// ── Pages ("Σελίδα" collection type) ───────────────────────────────────
+// Fixed pages (Σχετικά, …) built in the CMS from sections. Which design a
+// page gets comes from its `blocks`: each section is a ready-made layout.
+
+export type CardIcon = "pen" | "book" | "notebook" | "camera" | "film" | "heart";
+
+export type PageCard = {
+  id: number;
+  icon: CardIcon | null;
+  title: string;
+  text: string | null;
+  url: string | null;
+};
+
+export type PageBlock =
+  | {
+      __component: "sections.hero";
+      id: number;
+      kicker: string | null;
+      title: string;
+      subtitle: string | null;
+      tagline: string | null;
+      image: StrapiMedia | null;
+      primaryLabel: string | null;
+      primaryUrl: string | null;
+      secondaryLabel: string | null;
+      secondaryUrl: string | null;
+    }
+  | {
+      __component: "sections.story";
+      id: number;
+      kicker: string | null;
+      title: string | null;
+      body: RichTextNode[] | null;
+      quote: string | null;
+      quoteLabel: string | null;
+    }
+  | {
+      __component: "sections.card-grid";
+      id: number;
+      kicker: string | null;
+      title: string | null;
+      cards: PageCard[] | null;
+    }
+  | {
+      __component: "sections.cta";
+      id: number;
+      title: string | null;
+      text: string | null;
+      primaryLabel: string | null;
+      primaryUrl: string | null;
+      secondaryLabel: string | null;
+      secondaryUrl: string | null;
+    }
+  // The article blocks that also make sense on a page.
+  | Extract<
+      ContentBlock,
+      {
+        __component:
+          | "blocks.text"
+          | "blocks.image"
+          | "blocks.gallery"
+          | "blocks.quote"
+          | "blocks.divider"
+          | "blocks.instagram"
+          | "blocks.youtube"
+          | "blocks.spotify";
+      }
+    >;
+
+export type Page = {
+  id: number;
+  documentId: string;
+  title: string;
+  slug: string;
+  layout: "full" | "reading";
+  seoDescription: string | null;
+  blocks: PageBlock[] | null;
+};
+
+// One page by its slug. Wrapped in cache() so the page and its metadata share
+// one request. Returns null when there is no such page — or when the CMS
+// doesn't have the "page" type yet — so the site just shows its 404.
+export const getPageBySlug = cache(async (slug: string): Promise<Page | null> => {
+  const params = new URLSearchParams();
+  params.set("filters[slug][$eq]", slug);
+  params.set("pagination[pageSize]", "1");
+  for (const c of [
+    "blocks.text",
+    "blocks.quote",
+    "blocks.spotify",
+    "blocks.youtube",
+    "blocks.instagram",
+    "blocks.divider",
+    "sections.story",
+    "sections.cta",
+  ]) {
+    params.set(`populate[blocks][on][${c}]`, "true");
+  }
+  for (const c of ["blocks.image", "blocks.gallery", "sections.hero"]) {
+    params.set(`populate[blocks][on][${c}][populate]`, "*");
+  }
+  params.set("populate[blocks][on][sections.card-grid][populate][cards]", "true");
+  try {
+    const res = await strapiGet<ListResponse<Page>>("pages", params);
+    return res.data[0] ?? null;
+  } catch (error) {
+    if (error instanceof StrapiNotFoundError) return null;
+    throw error;
+  }
+});
+
 export function mediaUrl(media: StrapiMedia | null | undefined): string | null {
   return absoluteCmsUrl(media?.url);
 }

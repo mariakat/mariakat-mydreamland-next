@@ -43,7 +43,7 @@ function lines(text: string | null | undefined): string[] {
     .filter(Boolean);
 }
 
-function Block({ block }: { block: ContentBlock }) {
+export function Block({ block }: { block: ContentBlock }) {
   switch (block.__component) {
     case "blocks.text":
       return <RichText content={block.content} cmsBase={cmsUrl()} />;
